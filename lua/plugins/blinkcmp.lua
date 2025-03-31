@@ -7,10 +7,6 @@ vim.api.nvim_create_autocmd("User", {
   pattern = "BlinkCmpMenuClose",
   callback = function() vim.b.copilot_suggestion_hidden = false end,
 })
-local function has_words_before()
-  local line, col = (unpack or table.unpack)(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
-end
 
 ---@type function?, function?
 local icon_provider, hl_provider
@@ -84,8 +80,7 @@ return {
     "rafamadriz/friendly-snippets",
     "xzbdmw/colorful-menu.nvim",
     "kristijanhusak/vim-dadbod-completion",
-    "fang2hou/blink-copilot",
-    -- "giuxtaposition/blink-cmp-copilot",
+    -- "fang2hou/blink-copilot",
   },
   opts = {
     enabled = function()
@@ -103,7 +98,7 @@ return {
         "snippets",
         "buffer",
         "dadbod",
-        "copilot",
+        -- "copilot",
       },
       providers = {
         dadbod = {
@@ -111,25 +106,25 @@ return {
           module = "vim_dadbod_completion.blink",
           score_offset = 85, -- the higher the number, the higher the priority
         },
-        copilot = {
-          name = "copilot",
-          module = "blink-copilot",
-          score_offset = 100,
-          async = true,
-          -- opts = {
-          --   max_completions = 3,
-          --   max_attempts = 4,
-          --   kind_name = "CP",
-          --   kind_icon = " ",
-          --   -- debounce = 750, ---@type integer | false
-          --   auto_refresh = {
-          --     backward = true,
-          --     forward = true,
-          --   },
-          --   -- Local options override global ones
-          --   -- Final settings: max_completions = 3, max_attempts = 2, kind = "Copilot"
-          -- },
-        },
+        -- copilot = {
+        --   name = "copilot",
+        --   module = "blink-copilot",
+        --   score_offset = 100,
+        --   async = true,
+        --   -- opts = {
+        --   --   max_completions = 3,
+        --   --   max_attempts = 4,
+        --   --   kind_name = "CP",
+        --   --   kind_icon = " ",
+        --   --   -- debounce = 750, ---@type integer | false
+        --   --   auto_refresh = {
+        --   --     backward = true,
+        --   --     forward = true,
+        --   --   },
+        --   --   -- Local options override global ones
+        --   --   -- Final settings: max_completions = 3, max_attempts = 2, kind = "Copilot"
+        --   -- },
+        -- },
       },
     },
 
@@ -143,8 +138,8 @@ return {
         winblend = 25,
         draw = {
           align_to = "label", -- or 'none' to disable, or 'cursor' to align to the cursor
-          columns = { { "kind_icon", gap = 1 }, { "label", "kind", gap = 1 } },
-          -- columns = { { "kind_icon", gap = 1 }, { "label", "source_name", "kind", gap = 1 } },
+          -- columns = { { "kind_icon", gap = 1 }, { "label", "kind", gap = 1 } },
+          columns = { { "kind_icon", gap = 1 }, { "label", "source_name", "kind", gap = 1 } },
           -- columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind", gap = 1 } },
 
           treesitter = { "lsp" },

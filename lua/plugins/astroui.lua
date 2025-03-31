@@ -7,7 +7,7 @@ return {
     -- colorscheme = "solarized-osaka-night",
     -- colorscheme = "astrodark",
     -- colorscheme = "tokyonight",
-    -- colorscheme = "flexoki-dawn",
+    -- colorscheme = "flexoki",
     colorscheme = "jellybeans",
     -- colorscheme = "vague",
     -- colorscheme = "catppuccin",

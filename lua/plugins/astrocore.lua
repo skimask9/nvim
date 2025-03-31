@@ -104,22 +104,17 @@ return {
         ["<C-s>"] = { ":w!<cr>", desc = "Save File" }, -- change description but the same command
         ["<F1>"] = { ":w|!python3 %<CR>", desc = "Run python file" },
         ["<F3>"] = { ":w|!go run %<cr>", desc = "Run go file" },
-        ["<TAB>"] = { function() require("snacks").picker.buffers() end, desc = "Find buffers" },
+        -- ["<TAB>"] = { function() require("snacks").picker.buffers() end, desc = "Find buffers" },
         ["<F2>"] = { ":ToggleTerm direction=horizontal<cr>", desc = "ToggleTerm" },
         [",m"] = { "<cmd>lua vim.cmd('%s/\\r//g')<cr>", desc = "Remove carriage return" },
-        ["<leader>Go"] = { "<cmd>:GitBlameOpenFileURL<cr>", desc = "Open File in Github.com" },
-        ["<leader>Gy"] = { "<cmd>:GitBlameCopyFileURL<cr>", desc = "To copy url link github" },
-        ["<leader>Gt"] = { "<cmd>:GitBlameToggle<cr>", desc = "To toggle git blame" },
+        -- ["<leader>Go"] = { "<cmd>:GitBlameOpenFileURL<cr>", desc = "Open File in Github.com" },
+        -- ["<leader>Gy"] = { "<cmd>:GitBlameCopyFileURL<cr>", desc = "To copy url link github" },
+        -- ["<leader>Gt"] = { "<cmd>:GitBlameToggle<cr>", desc = "To toggle git blame" },
         -- ["<C-x>"] = { "<cmd>:Telescope buffers<cr>" },
-        ["<leader>Mt"] = { "<cmd>:GithubPreviewToggle<cr>", desc = "Toggle GithubPreviewToggle" },
-        ["<leader>fA"] = { "<cmd>:Telescope tmux windows<cr>", desc = "Tmux switcher" },
         -- tables with the `name` key will be registered with which-key if it's installed
         -- this is useful for naming menus
         -- ["<leader>b"] = { name = "Buffers" },
         ["<leader>v"] = { name = "Venv" },
-        ["<leader>G"] = { name = " Git links" },
-        ["<leader>T"] = { name = " LazyClip" },
-        ["<leader>D"] = { name = " Tasks" },
         -- quick save
         ["<c-c>"] = { '"+y', desc = "" },
         ["<c-v>"] = { '"+p', desc = "" },
@@ -131,7 +126,7 @@ return {
         ["<M-Up>"] = { "<cmd>m-2<cr>", desc = "" },
         -- ["<M-j>"] = { "<cmd>m+<cr>", desc = "" },
         -- ["<M-k>"] = { "<cmd>m-2<cr>", desc = "" },
-        ["q"] = { "<cmd>q<cr>", desc = "" },
+        ["q"] = { "<cmd>q!<cr>", desc = "" },
       },
       i = {
         ["<c-c>"] = { '"+y', desc = "" },

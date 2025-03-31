@@ -10,9 +10,10 @@ return {
         info = "DiagnosticInfo",
         hint = "DiagnosticHint",
         arrow = "NonText",
-        background = "CursorLine", -- Can be a highlight or a hexadecimal color (#RRGGBB)
-        mixing_color = "None", -- Can be None or a hexadecimal color (#RRGGBB). Used to blend the background color with the diagnostic background color with another color.
-        -- mixing_color = "#RRGGBB",
+        -- background = "CursorLine", -- Can be a highlight or a hexadecimal color (#RRGGBB)
+        background = "None", -- Can be a highlight or a hexadecimal color (#RRGGBB)
+        -- mixing_color = "None", -- Can be None or a hexadecimal color (#RRGGBB). Used to blend the background color with the diagnostic background color with another color.
+        mixing_color = "None",
       },
       options = {
         -- Show the source of the diagnostic.

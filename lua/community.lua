@@ -20,13 +20,13 @@ return {
   { import = "astrocommunity.editing-support.todo-comments-nvim" },
   { import = "astrocommunity.debugging.nvim-dap-virtual-text" },
   { import = "astrocommunity.editing-support.copilotchat-nvim" },
-  { import = "astrocommunity.recipes.vscode-icons" },
-  { import = "astrocommunity.recipes.ai" },
+  -- { import = "astrocommunity.completion.copilot-lua-cmp" },
   { import = "astrocommunity.motion.grapple-nvim" },
   { import = "astrocommunity.editing-support.vim-move" },
   { import = "astrocommunity.bars-and-lines.lualine-nvim" },
   { import = "astrocommunity.colorscheme.catppuccin" },
   { import = "astrocommunity.recipes.vscode-icons" },
+  { import = "astrocommunity.recipes.astrolsp-no-insert-inlay-hints" },
 
   -- { import = "astrocommunity.utility.noice-nvim" },
   -- import/override with your plugins folder

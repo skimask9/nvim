@@ -2,6 +2,7 @@
 -- lualine.lua
 --
 -- Custom status line
+
 local function GitBlameComponent()
   -- Ensure the gitblame plugin is loaded
   local git_blame_ok, git_blame = pcall(require, "gitblame")
@@ -52,78 +53,126 @@ return {
       end,
     },
   },
-  dependencies = { "nvim-tree/nvim-web-devicons", "pnx/lualine-lsp-status" },
+  dependencies = { "nvim-tree/nvim-web-devicons", "AndreM222/copilot-lualine", "pnx/lualine-lsp-status" },
   event = "VeryLazy",
   config = function()
-    -- Custom Lualine component to show attached language server
+    local branch_bg = vim.api.nvim_get_hl(0, { name = "Folded" }).bg
+    local diff_blame_bg = vim.api.nvim_get_hl(0, { name = "Visual" }).bg
+    local non_text = vim.api.nvim_get_hl(0, { name = "NonText" }).fg
+    local string_txt = vim.api.nvim_get_hl(0, { name = "String" }).fg
 
+    -- Get the colors based on the current background setting
     require("lualine").setup {
       options = {
         theme = "auto",
+        always_divide_middle = true,
         disabled_filetypes = { -- Filetypes to disable lualine for.
-          statusline = { "Avante", "AvanteInput", "neo-tree" }, -- only ignores the ft for statusline.
+          statusline = { "snacks_dashboard" }, -- only ignores the ft for statusline.
         },
-        component_separators = "",
+        -- component_separators = { left = "", right = "" },
+        component_separators = { left = "", right = "" },
         globalstatus = true,
         section_separators = { left = "", right = "" },
-        -- section_separators = "",
       },
       sections = {
         lualine_a = {
-          { "mode", separator = { left = " ", right = "" }, icon = { "", align = "left" }, padding = 0 },
+          { "mode", separator = { left = "", right = "" }, icon = { "", align = "left" }, padding = 0 },
         },
         lualine_b = {
           {
             "branch",
+            draw_empty = false,
             icon = { " ", align = "left" },
-            separator = { left = "", right = "" },
             padding = { left = 0, right = 0 },
-            color = { gui = "italic,bold" },
-            -- color = { fg = "#ffaa88", bg = "grey", gui = "italic,bold" },
+            color = { bg = string.format("#%06x", branch_bg), gui = "italic,bold" },
+            -- color = {
+            --     fg = "#99ad6a",
+            --     bg = "#384048",
+            --     gui = "italic,bold",
+            -- },
+
+            separator = { left = "", right = "" },
           },
           {
             "diff",
+            draw_empty = false,
+
             symbols = { added = " ", modified = " ", removed = " " },
-            separator = { right = "" },
             padding = { left = 1, right = 0 },
+            -- color = { bg = "#404040" },
+            color = { bg = string.format("#%06x", diff_blame_bg) },
           },
-          { GitBlameComponent, padding = { left = 1, right = 0 }, color = { fg = "#606060", gui = "italic" } },
+          {
+            GitBlameComponent,
+            draw_empty = false,
+
+            padding = { left = 0, right = 0 },
+            -- color = { fg = "#606060", bg = "#404040", gui = "italic" },
+            color = {
+              bg = string.format("#%06x", diff_blame_bg),
+              fg = string.format("#%06x", non_text),
+              gui = "italic,bold",
+            },
+
+            separator = { right = "" },
+          },
         },
-        lualine_c = { "searchcount", "grapple" },
+        lualine_c = { "grapple" },
         lualine_x = {
+
+          {
+            "copilot",
+            show_colors = true,
+            -- separator = { left = "" },
+            padding = { left = 0, right = 1 },
+            -- color = { bg = string.format("#%06x", diff_blame_bg) },
+          },
           {
             "diagnostics",
             symbols = { error = " ", warn = " ", info = " ", hint = " " },
             update_in_insert = true,
+            padding = { left = 0, right = 1 },
           },
+
+          -- { "lsp-status", separator = { left = "" } },
         },
         lualine_y = {
-          { "lsp-status", separator = { left = "" } },
+          {
+            "lsp-status",
+            separator = { left = "" },
+            padding = { left = 0, right = 1 },
+            color = { bg = string.format("#%06x", diff_blame_bg) },
+          },
+          -- {
+          --   "fileformat",
+          --   padding = { left = 0, right = 1 },
+          --   color = { bg = string.format("#%06x", diff_blame_bg) },
+          -- },
           {
             PythonVenvComponent,
             separator = { left = "" },
-            padding = { left = 0, right = 0 },
-            color = { fg = "#99ad6a", gui = "italic,bold" },
-          },
-          {
-            "fileformat",
+
             padding = { left = 1, right = 1 },
-            separator = { left = "", right = " " },
-            symbols = {
-              unix = "", -- e712
-              dos = "", -- e70f
-              mac = "", -- e711
+            color = {
+              fg = string.format("#%06x", string_txt),
+              bg = string.format("#%06x", diff_blame_bg),
             },
           },
-          { "filetype" },
+          {
+            "filetype",
+            padding = { left = 0, right = 1 },
+            separator = { left = "" },
+
+            color = { bg = string.format("#%06x", branch_bg) },
+          },
         },
         lualine_z = {
           {
             "location",
-            separator = { left = "", right = " " },
+            separator = { left = "", right = "" },
             padding = { left = 0, right = 1 },
           },
-          { "progress", separator = { right = " " }, padding = 0 },
+          { "progress", separator = { right = "" }, padding = 0 },
         },
       },
       inactive_sections = {
@@ -134,7 +183,7 @@ return {
         lualine_y = {},
         lualine_z = { "location" },
       },
-      extensions = { "toggleterm", "trouble", "neo-tree", "mason" },
+      extensions = { "toggleterm", "trouble", "mason", "lazy" },
     }
   end,
 }

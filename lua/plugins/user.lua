@@ -19,6 +19,16 @@ return {
     -- enabled = false,
     opts = {},
   },
+  {
+    "vague2k/vague.nvim",
+    enabled = false,
+    config = function()
+      -- NOTE: you do not need to call setup if you don't want to.
+      require("vague").setup {
+        vim.cmd "colorscheme vague",
+      }
+    end,
+  },
   -- {
   --   "rmagatti/goto-preview",
   --   event = "BufEnter",
@@ -47,7 +57,7 @@ return {
       date_format = "%r",
       -- message_template = "  <author> 󰔠 <date> 󰈚 <summary>  <sha>",
       message_template = " <author> 󰈚 <summary>",
-      message_when_not_committed = " Not Committed Yet",
+      message_when_not_committed = " Not Committed Yet",
       max_commit_summary_length = 25,
       -- highlight_group = "Question",
       -- virtual_text_column = 80,
@@ -95,6 +105,7 @@ return {
     "razak17/tailwind-fold.nvim",
     -- enabled = false,
     opts = {},
+    ft = { "html,htmldjango,django, templ" },
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     event = "VeryLazy",
     config = function() require("tailwind-fold").setup { ft = { "html", "htmldjango", "django", "templ" } } end,

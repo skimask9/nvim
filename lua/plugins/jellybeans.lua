@@ -19,6 +19,7 @@ return {
         -- Customize Telescope colors
         hl.NeoTreeFloatBorder = { bg = c.background, fg = c.grey_three }
         hl.TelescopeBorder = { fg = c.grey_three, bg = c.grey_three }
+        -- hl.SnacksPickerBorder = { fg = c.biloba_flower, bg = c.biloba_flower }
         hl.NoiceCmdlinePopupTitleCmdline = { bg = c.biloba_flower, fg = c.background }
         hl.NoiceCmdlinePopupBorderCmdLine = { bg = c.none, fg = c.biloba_flower }
       end,
