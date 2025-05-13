@@ -153,7 +153,7 @@ return {
           },
           InclineNormalNC = {
             default = true,
-            group = "NormalFloat",
+            group = "NormalFloatNC",
           },
         },
       },
@@ -187,7 +187,7 @@ return {
             if name_or_index ~= "" and name_or_index ~= nil then grapple_status = "󰛢 " .. name_or_index .. " " end
           end
         else
-          grapple_status = " "
+          grapple_status = ""
         end
 
         return {
@@ -214,6 +214,7 @@ return {
             "",
             -- guifg = vim.o.background == "light" and "#b7b5ac" or "#51576d",
             guifg = vim.o.background == "light" and extra_colors.bg or extra_colors.bg,
+            guibg = "NONE",
           },
           -- guibg = "#44406e",
           -- "#3b4261"

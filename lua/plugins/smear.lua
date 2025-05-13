@@ -1,6 +1,6 @@
 return {
   "sphamba/smear-cursor.nvim",
-  enabled = true,
+  enabled = false,
   dependencies = {
     "karb94/neoscroll.nvim",
     -- event = "VeryLazy",

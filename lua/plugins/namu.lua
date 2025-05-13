@@ -20,7 +20,7 @@ return {
         },
       }
       -- === Suggested Keymaps: ===
-      vim.keymap.set("", "<leader>ls", ":Namu symbols<cr>", {
+      vim.keymap.set("", "<S-TAB>", ":Namu symbols<cr>", {
         desc = "Jump to LSP symbol",
         silent = true,
       })

@@ -3,6 +3,20 @@
 --
 -- Custom status line
 
+-- DOING COMPONENT
+local function doing_status()
+  local status_doing = require("doing").status()
+  if not status_doing or status_doing == "" then return "" end
+
+  local win_width = vim.api.nvim_win_get_width(0)
+  local max_len = math.floor(win_width * 0.3)
+
+  if #status_doing > max_len then status_doing = status_doing:sub(1, max_len) .. "..." end
+
+  return " " .. status_doing
+end
+
+-- GIT BLAME COMMIT COMPONENT
 local function GitBlameComponent()
   -- Ensure the gitblame plugin is loaded
   local git_blame_ok, git_blame = pcall(require, "gitblame")
@@ -18,6 +32,8 @@ local function GitBlameComponent()
     return " "
   end
 end
+
+--  PYTHON VENV COMPONENT
 local function PythonVenvComponent()
   -- Only show for Python files
   if vim.bo.filetype ~= "python" then return "" end
@@ -53,18 +69,24 @@ return {
       end,
     },
   },
-  dependencies = { "nvim-tree/nvim-web-devicons", "AndreM222/copilot-lualine", "pnx/lualine-lsp-status" },
+  dependencies = { "nvim-tree/nvim-web-devicons", "pnx/lualine-lsp-status", "AndreM222/copilot-lualine" },
   event = "VeryLazy",
   config = function()
     local branch_bg = vim.api.nvim_get_hl(0, { name = "Folded" }).bg
     local diff_blame_bg = vim.api.nvim_get_hl(0, { name = "Visual" }).bg
     local non_text = vim.api.nvim_get_hl(0, { name = "NonText" }).fg
     local string_txt = vim.api.nvim_get_hl(0, { name = "String" }).fg
+    local auto_theme_custom = require "lualine.themes.auto"
+    auto_theme_custom.normal.c.bg = "None"
+    auto_theme_custom.insert.c.bg = "None"
+    auto_theme_custom.command.c.bg = "None"
+    auto_theme_custom.visual.c.bg = "None"
+    auto_theme_custom.replace.c.bg = "None"
 
     -- Get the colors based on the current background setting
     require("lualine").setup {
       options = {
-        theme = "auto",
+        theme = auto_theme_custom,
         always_divide_middle = true,
         disabled_filetypes = { -- Filetypes to disable lualine for.
           statusline = { "snacks_dashboard" }, -- only ignores the ft for statusline.
@@ -117,7 +139,18 @@ return {
             separator = { right = "" },
           },
         },
-        lualine_c = { "grapple" },
+        lualine_c = {
+          -- { "grapple", color = "Function" },
+          { "%=" },
+
+          {
+            doing_status,
+            color = {
+              fg = string.format("#%06x", non_text),
+              gui = "italic",
+            },
+          },
+        },
         lualine_x = {
 
           {
@@ -152,7 +185,7 @@ return {
             PythonVenvComponent,
             separator = { left = "" },
 
-            padding = { left = 1, right = 1 },
+            padding = { left = 0, right = 1 },
             color = {
               fg = string.format("#%06x", string_txt),
               bg = string.format("#%06x", diff_blame_bg),
@@ -176,12 +209,13 @@ return {
         },
       },
       inactive_sections = {
-        lualine_a = { "filename" },
+        -- these are to remove the defaults
+        lualine_a = {},
         lualine_b = {},
+        lualine_y = {},
+        lualine_z = {},
         lualine_c = {},
         lualine_x = {},
-        lualine_y = {},
-        lualine_z = { "location" },
       },
       extensions = { "toggleterm", "trouble", "mason", "lazy" },
     }

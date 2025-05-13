@@ -4,6 +4,9 @@ return {
   config = function()
     require("tiny-inline-diagnostic").setup {
       preset = "modern", -- Can be: "modern", "classic", "minimal", "powerline", ghost", "simple", "nonerdfont", "amongus"
+      transparent_bg = true, -- Set the background of the diagnostic to transparent
+      transparent_cursorline = true, -- Set the background of the cursorline to transparent (only one the first diagnostic)
+
       hi = {
         error = "DiagnosticError",
         warn = "DiagnosticWarn",

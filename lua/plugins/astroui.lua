@@ -14,9 +14,22 @@ return {
     -- colorscheme = "nightfly",
     -- colorscheme = "tokyonight-day",
     -- AstroUI allows you to easily modify highlight groups easily for any and all colorschemes
+    -- highlights = {
+    --   init = function()
+    --     local get_hlgroup = require("astronvim").get_hlgroup
+    --     local comment = get_hlgroup "Comment"
+    --     return {
+    --       StatusLine = { bg = "none" },
+    --       StatusLineNC = { bg = "none" },
+    --       -- CopilotSuggestion = { fg = comment },
+    --     }
+    --   end,
+    -- },
     highlights = {
       init = { -- this table overrides highlights in all themes
         -- Normal = { bg = "#000000" },
+        StatusLine = { bg = "none" },
+        StatusLineNC = { bg = "none" },
       },
       astrodark = { -- a table of overrides/changes when applying the astrotheme theme
         -- Normal = { bg = "#000000" },

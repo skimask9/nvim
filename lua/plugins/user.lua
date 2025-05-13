@@ -70,7 +70,7 @@ return {
   },
   {
     "Abstract-IDE/abstract-autocmds",
-    enabled = true,
+    enabled = false,
     lazy = false,
     config = function()
       require("abstract-autocmds").setup {

@@ -5,6 +5,7 @@
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
 --       as this provides autocomplete and documentation while editing
 
+local Terminal = require("toggleterm.terminal").Terminal
 ---@type LazySpec
 return {
   "AstroNvim/astrocore",
@@ -27,7 +28,7 @@ return {
     -- vim options can be configured here
     options = {
       opt = { -- vim.opt.<key>
-        relativenumber = true, -- sets vim.opt.relativenumber
+        relativenumber = false, -- sets vim.opt.relativenumber
         showtabline = 1, -- disable tabline
         number = true, -- sets vim.opt.number
         -- background = "light",
@@ -48,15 +49,17 @@ return {
         },
         showbreak = "↪ ",
         wrap = true, -- sets vim.opt.wrap
-        colorcolumn = "89",
+        -- colorcolumn = "89",
         cmdheight = 0,
-        pumblend = 0, -- for cmp menu
-        winblend = 0, -- for documentation popup
+        pumblend = 5, -- for cmp menu
+        winblend = 5, -- for documentation popup
         rnu = true,
         scrolloff = 10,
         laststatus = 3,
         -- clipboard = "unnamedplus",
         sidescrolloff = 8,
+        --guicursor = "n-v-c:block-Cursor/lCursor-blinkwait1000-blinkon100-blinkoff100, i-ci:ver25-Cursor/lCursor-blinkwait1000-blinkon100-blinkoff100,r:hor50-Cursor/lCursor-blinkwait100-blinkon100-blinkoff100",
+
         -- guicursor = "n-v-c-sm-ve:block,i-ci:ver20,r-cr-o:hor20,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor",
       },
       g = { -- vim.g.<key>
@@ -102,9 +105,15 @@ return {
         ["<Leader>b"] = { desc = "Buffers" },
         -- quick save
         ["<C-s>"] = { ":w!<cr>", desc = "Save File" }, -- change description but the same command
-        ["<F1>"] = { ":w|!python3 %<CR>", desc = "Run python file" },
+        -- ["<F1>"] = { ":w|!python3 %<CR>", desc = "Run python file" },
+        ["<F1>"] = {
+          function()
+            local term = Terminal:new { cmd = "python3 " .. vim.fn.expand "%:p", hidden = true, close_on_exit = false }
+            term:toggle()
+          end,
+        },
         ["<F3>"] = { ":w|!go run %<cr>", desc = "Run go file" },
-        -- ["<TAB>"] = { function() require("snacks").picker.buffers() end, desc = "Find buffers" },
+        ["<TAB>"] = { function() require("snacks").picker.buffers() end, desc = "Find buffers" },
         ["<F2>"] = { ":ToggleTerm direction=horizontal<cr>", desc = "ToggleTerm" },
         [",m"] = { "<cmd>lua vim.cmd('%s/\\r//g')<cr>", desc = "Remove carriage return" },
         -- ["<leader>Go"] = { "<cmd>:GitBlameOpenFileURL<cr>", desc = "Open File in Github.com" },
@@ -115,6 +124,7 @@ return {
         -- this is useful for naming menus
         -- ["<leader>b"] = { name = "Buffers" },
         ["<leader>v"] = { name = "Venv" },
+        ["<leader>D"] = { name = " Tasks" },
         -- quick save
         ["<c-c>"] = { '"+y', desc = "" },
         ["<c-v>"] = { '"+p', desc = "" },

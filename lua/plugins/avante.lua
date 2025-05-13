@@ -1,4 +1,4 @@
-local prefix = "<Leader>A"
+local prefix = "<Leader>a"
 return {
   "yetone/avante.nvim",
   -- event = "VeryLazy",
@@ -6,7 +6,7 @@ return {
   -- enabled = false,
   version = false, -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
   opts = {
-    windows = { file_selector = { provider = "snacks" } },
+    windows = { selector = { provider = "snacks" } },
     mappings = {
       ask = prefix .. "<CR>",
       edit = prefix .. "e",
@@ -22,6 +22,7 @@ return {
       },
       files = {
         add_current = prefix .. "c", -- Add current buffer to selected files
+        add_all_buffers = prefix .. "B",
       },
       select_model = prefix .. "?", -- Select model command
       select_history = prefix .. "h", -- Select history command

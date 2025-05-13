@@ -7,7 +7,20 @@ vim.api.nvim_create_autocmd("User", {
   pattern = "BlinkCmpMenuClose",
   callback = function() vim.b.copilot_suggestion_hidden = false end,
 })
+local function has_words_before()
+  local line, col = (unpack or table.unpack)(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
+end
 
+local function copilot_action(action)
+  local copilot = require "copilot.suggestion"
+  return function()
+    if copilot.is_visible() then
+      copilot[action]()
+      return true -- doesn't run the next command
+    end
+  end
+end
 ---@type function?, function?
 local icon_provider, hl_provider
 
@@ -80,6 +93,7 @@ return {
     "rafamadriz/friendly-snippets",
     "xzbdmw/colorful-menu.nvim",
     "kristijanhusak/vim-dadbod-completion",
+    { "Kaiser-Yang/blink-cmp-avante", lazy = true },
     -- "fang2hou/blink-copilot",
   },
   opts = {
@@ -98,6 +112,7 @@ return {
         "snippets",
         "buffer",
         "dadbod",
+        "avante",
         -- "copilot",
       },
       providers = {
@@ -105,6 +120,10 @@ return {
           name = "Dadbod",
           module = "vim_dadbod_completion.blink",
           score_offset = 85, -- the higher the number, the higher the priority
+        },
+        avante = {
+          module = "blink-cmp-avante",
+          name = "Avante",
         },
         -- copilot = {
         --   name = "copilot",
@@ -127,19 +146,76 @@ return {
         -- },
       },
     },
+    keymap = {
+      ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
+      ["<Up>"] = { "select_prev", "fallback" },
+      ["<Down>"] = { "select_next", "fallback" },
+      ["<C-N>"] = { "select_next", "show" },
+      ["<C-P>"] = { "select_prev", "show" },
+      -- ["<C-J>"] = { "select_next", "fallback" },
+      ["<C-K>"] = { "select_prev", "fallback" },
+      ["<C-U>"] = { "scroll_documentation_up", "fallback" },
+      ["<C-D>"] = { "scroll_documentation_down", "fallback" },
+      ["<C-e>"] = { "hide", "fallback" },
+      -- ["<CR>"] = { "accept", "fallback" },
+      ["<Tab>"] = {
+        copilot_action "accept",
+        "select_next",
+        "snippet_forward",
+        function(cmp)
+          if has_words_before() or vim.api.nvim_get_mode().mode == "c" then return cmp.show() end
+        end,
+        "fallback",
+      },
+      preset = "super-tab",
+      ["<CR>"] = {
+        function(cmp)
+          if vim.b[vim.api.nvim_get_current_buf()].nes_state then
+            cmp.hide()
+            return (
+              require("copilot-lsp.nes").apply_pending_nes()
+              and require("copilot-lsp.nes").walk_cursor_end_edit()
+            )
+          end
+          if cmp.snippet_active() then
+            return cmp.accept()
+          else
+            return cmp.select_and_accept()
+          end
+        end,
+        "snippet_forward",
+        "fallback",
+      },
+      ["<S-Tab>"] = {
+        "select_prev",
+        "snippet_backward",
+        function(cmp)
+          if vim.api.nvim_get_mode().mode == "c" then return cmp.show() end
+        end,
+        "fallback",
+      },
+      ["<C-X>"] = { copilot_action "next" },
+      ["<C-Z>"] = { copilot_action "prev" },
+      ["<C-Right>"] = { copilot_action "accept_word" },
+      ["<C-L>"] = { copilot_action "accept_word" },
+      ["<C-Down>"] = { copilot_action "accept_line" },
+      ["<C-J>"] = { copilot_action "accept_line", "select_next", "fallback" },
+      ["<C-C>"] = { copilot_action "dismiss" },
+    },
 
     completion = {
       menu = {
-        auto_show = function(ctx)
-          return ctx.mode ~= "cmdline" or not vim.tbl_contains({ "/", "?" }, vim.fn.getcmdtype())
-        end,
+        -- auto_show = function(ctx)
+        --   return ctx.mode ~= "cmdline" or not vim.tbl_contains({ "/", "?" }, vim.fn.getcmdtype())
+        -- end,
+        auto_show = function(ctx) return ctx.mode ~= "cmdline" end,
         border = "none",
-
+        winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
         winblend = 25,
         draw = {
           align_to = "label", -- or 'none' to disable, or 'cursor' to align to the cursor
-          -- columns = { { "kind_icon", gap = 1 }, { "label", "kind", gap = 1 } },
-          columns = { { "kind_icon", gap = 1 }, { "label", "source_name", "kind", gap = 1 } },
+          columns = { { "kind_icon", gap = 1 }, { "label", "kind", gap = 1 } },
+          -- columns = { { "kind_icon", gap = 1 }, { "label", "source_name", "kind", gap = 1 } },
           -- columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind", gap = 1 } },
 
           treesitter = { "lsp" },
@@ -163,6 +239,7 @@ return {
           border = "none",
           -- border = "rounded",
           winblend = 25,
+          winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
         },
       },
     },
@@ -175,6 +252,7 @@ return {
         -- border = (vim.o.background == "light") and "rounded" or "none",
         border = "none",
         show_documentation = true,
+        winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
         winblend = 25,
       },
     },
