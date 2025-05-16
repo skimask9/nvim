@@ -59,13 +59,14 @@ local function PythonVenvComponent()
 end
 return {
   "nvim-lualine/lualine.nvim",
+  enabled = true,
   specs = {
     {
       "rebelot/heirline.nvim",
       optional = true,
       opts = function(_, opts)
         opts.statusline = nil
-        opts.winbar = nil
+        -- opts.winbar = nil
       end,
     },
   },

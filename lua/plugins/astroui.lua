@@ -30,6 +30,14 @@ return {
         -- Normal = { bg = "#000000" },
         StatusLine = { bg = "none" },
         StatusLineNC = { bg = "none" },
+        WinBar = { bg = "none" },
+        WinBarNC = { bg = "none" },
+        TreesitterContext = { bg = "none" },
+        FoldColumn = { bg = "none" },
+        CopilotSuggetion = { fg = "#888888" },
+        CopilotAnnotation = { fg = "#888888" },
+
+        -- StatusColumns = { bg = "none" },
       },
       astrodark = { -- a table of overrides/changes when applying the astrotheme theme
         -- Normal = { bg = "#000000" },

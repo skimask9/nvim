@@ -30,18 +30,6 @@ end
 --- @param opts table see below
 --- @return table
 ---
---- The arguments are the same as for shorten_path, with the following additional options:
----   head_style: table - a table of highlight groups to apply to the head (see
----      :help incline-render) (default: nil)
----   tail_style: table - a table of highlight groups to apply to the tail (default: nil)
----
---- Example: get_short_path_fancy('foo/bar/qux/baz.txt', {
----   short_len = 1,
----   tail_count = 2,
----   head_max = 0,
----   head_style = { guibg = '#555555' },
---- }) -> { 'f/b/', guibg = '#555555' }, { 'qux/baz.txt' }
----
 local function shorten_path_styled(path, opts)
   opts = opts or {}
   local head_style = opts.head_style or {}
@@ -57,44 +45,6 @@ local function shorten_path_styled(path, opts)
     vim.list_extend(tail_style, { result[2] }),
   }
 end
--- vim.api.nvim_create_autocmd("ColorScheme", {
---   callback = function()
---     extra_colors = {} -- Removed 'local'
---     if vim.g.colors_name == "catppuccin-frappe" then
---       extra_colors.bg = "#51576d"
---     elseif vim.g.colors_name == "nightfly" then
---       extra_colors.bg = "#1d3b53"
---     elseif vim.g.colors_name == "catppuccin-mocha" then
---       extra_colors.bg = "#45475a"
---     elseif vim.g.colors_name == "flexoki" then
---       extra_colors.bg = "#b7b5ac"
---     elseif vim.g.colors_name == "jellybeans" then
---       -- extra_colors.bg = "#384048"
---       extra_colors.bg = "#ffffff"
---     else
---       extra_colors.bg = "#3b4261" --tokyonight
---     end
---   end,
--- })
--- local extra_colors = {}
--- if vim.g.colors_name == "catppuccin-frappe" then
---   -- local frappe = require("catppuccin.palettes").get_palette "frappe"
---   extra_colors = {
---     bg = "#51576d",
---   }
--- elseif vim.g.colors_name == "nigtfly" then
---   extra_colors = {
---     bg = "#1d3b53",
---   }
--- elseif vim.g.colors_name == "flexoki" then
---   extra_colors = {
---     bg = "#b7b5ac",
---   }
--- else
---   extra_colors = {
---     bg = "#3b4261",
---   }
--- end
 return {
   "b0o/incline.nvim",
   event = "VeryLazy",
@@ -112,10 +62,13 @@ return {
       extra_colors.bg = "#45475a"
     elseif vim.g.colors_name == "flexoki" then
       extra_colors.bg = "#b7b5ac"
+      extra_colors.NONE = "NONE"
+
       extra_colors.grapple = "#5e409d"
     elseif vim.g.colors_name == "jellybeans" then
       extra_colors.bg = "#384048"
       extra_colors.grapple = "#d7af87"
+      extra_colors.NONE = "NONE"
     else
       extra_colors.bg = "#3b4261" --tokyonight
       extra_colors.grapple = "#d7af87"
@@ -143,19 +96,6 @@ return {
         cursorline = true,
         focused_win = false,
         only_win = false,
-      },
-      highlight = {
-
-        groups = {
-          InclineNormal = {
-            default = true,
-            group = "NormalFloat",
-          },
-          InclineNormalNC = {
-            default = true,
-            group = "NormalFloatNC",
-          },
-        },
       },
       ignore = {
         buftypes = "special",
@@ -191,6 +131,7 @@ return {
         end
 
         return {
+
           { "", guifg = ft_color },
 
           ft_icon and { ft_icon, " ", guibg = ft_color, guifg = helpers.contrast_color(ft_color) } or "",
@@ -214,12 +155,8 @@ return {
             "",
             -- guifg = vim.o.background == "light" and "#b7b5ac" or "#51576d",
             guifg = vim.o.background == "light" and extra_colors.bg or extra_colors.bg,
-            guibg = "NONE",
           },
-          -- guibg = "#44406e",
-          -- "#3b4261"
-          -- "#384048",
-          -- nigtfly #1d3b53 ,
+          guibg = vim.o.background == "light" and extra_colors.NONE or extra_colors.NONE,
         }
       end,
     }
