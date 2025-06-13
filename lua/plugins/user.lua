@@ -16,19 +16,19 @@ return {
   -- },
   {
     "xzbdmw/colorful-menu.nvim",
-    -- enabled = false,
+    enabled = false,
     opts = {},
   },
-  {
-    "vague2k/vague.nvim",
-    enabled = false,
-    config = function()
-      -- NOTE: you do not need to call setup if you don't want to.
-      require("vague").setup {
-        vim.cmd "colorscheme vague",
-      }
-    end,
-  },
+  -- {
+  --   "vague2k/vague.nvim",
+  --   enabled = false,
+  --   config = function()
+  --     -- NOTE: you do not need to call setup if you don't want to.
+  --     require("vague").setup {
+  --       vim.cmd "colorscheme vague",
+  --     }
+  --   end,
+  -- },
   -- {
   --   "rmagatti/goto-preview",
   --   event = "BufEnter",
@@ -63,11 +63,11 @@ return {
       -- virtual_text_column = 80,
     },
   },
-  {
-    "shortcuts/no-neck-pain.nvim",
-    version = "*",
-    cmd = { "NoNeckPain" },
-  },
+  -- {
+  --   "shortcuts/no-neck-pain.nvim",
+  --   version = "*",
+  --   cmd = { "NoNeckPain" },
+  -- },
   {
     "Abstract-IDE/abstract-autocmds",
     enabled = false,

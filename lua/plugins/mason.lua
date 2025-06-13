@@ -25,6 +25,7 @@ return {
       },
     },
   },
+
   {
     "jay-babu/mason-nvim-dap.nvim",
     -- overrides `require("mason-nvim-dap").setup(...)`
@@ -54,6 +55,7 @@ return {
               django = true,
               console = "integratedTerminal",
             },
+
             {
               type = "python",
               request = "launch",

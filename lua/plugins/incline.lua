@@ -132,9 +132,9 @@ return {
 
         return {
 
-          { "", guifg = ft_color },
+          -- { "", guifg = ft_color },
 
-          ft_icon and { ft_icon, " ", guibg = ft_color, guifg = helpers.contrast_color(ft_color) } or "",
+          ft_icon and { " ", ft_icon, " ", guibg = ft_color, guifg = helpers.contrast_color(ft_color) } or "",
           -- " ",
 
           {
@@ -146,17 +146,18 @@ return {
           },
           {
             filename,
+            " ",
             gui = modified and "bold,italic" or "bold",
             -- guifg = "#888888",
             -- guibg = vim.o.background == "light" and "#b7b5ac" or "#51576d",
             guibg = vim.o.background == "light" and extra_colors.bg or extra_colors.bg,
           },
-          {
-            "",
-            -- guifg = vim.o.background == "light" and "#b7b5ac" or "#51576d",
-            guifg = vim.o.background == "light" and extra_colors.bg or extra_colors.bg,
-          },
-          guibg = vim.o.background == "light" and extra_colors.NONE or extra_colors.NONE,
+          -- {
+          --   "",
+          --   -- guifg = vim.o.background == "light" and "#b7b5ac" or "#51576d",
+          --   guifg = vim.o.background == "light" and extra_colors.bg or extra_colors.bg,
+          --   guibg = vim.o.background == "light" and extra_colors.bg or extra_colors.bg,
+          -- },
         }
       end,
     }

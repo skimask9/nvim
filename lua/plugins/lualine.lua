@@ -66,7 +66,7 @@ return {
       optional = true,
       opts = function(_, opts)
         opts.statusline = nil
-        -- opts.winbar = nil
+        opts.winbar = nil
       end,
     },
   },
@@ -164,6 +164,7 @@ return {
           {
             "diagnostics",
             symbols = { error = " ", warn = " ", info = " ", hint = " " },
+
             update_in_insert = true,
             padding = { left = 0, right = 1 },
           },
@@ -218,7 +219,7 @@ return {
         lualine_c = {},
         lualine_x = {},
       },
-      extensions = { "toggleterm", "trouble", "mason", "lazy" },
+      extensions = { "toggleterm", "trouble", "mason", "lazy", "avante", "neo-tree" },
     }
   end,
 }
