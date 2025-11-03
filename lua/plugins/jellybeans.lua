@@ -5,15 +5,16 @@ return {
   opts = {
 
     background = {
-      dark = "jellybeans", -- default dark palette
+      dark = "jellybeans_muted", -- default dark palette
       light = "jellybeans_muted_light", -- default light palette
     },
     transparent = true,
     italics = true,
     flat_ui = true,
+    bold = true,
 
     plugins = {
-      all = false,
+      all = true,
       auto = true, -- will read lazy.nvim and apply the colors for plugins that are installed
     },
     on_higlights = function(hl, c)
@@ -26,8 +27,53 @@ return {
       hl.NoiceCmdlinePopupBorderCmdLine = { bg = c.none, fg = c.biloba_flower }
       hl.TreesitterContext = { bg = c.none }
 
-      hl.CopilotSuggestion = { fg = "#888888" }
-      hl.CopilotAnnotation = { fg = "#888888" }
+      -- FzfLua
+      hl.FzfLuaBorder = { fg = c.background, bg = c.background }
+
+      -- MiniStarter
+      hl.MiniStarterHeader = { fg = c.error, bold = true }
+
+      -- Unused variables
+      hl.DiagnosticUnnecessary = {
+        fg = hl.Comment.fg,
+        italic = false,
+        underline = false,
+        undercurl = false,
+      }
+
+      hl.DiffViewDiffAdd = {
+        fg = c.git.add.fg,
+        bg = c.grey_three,
+      }
+      hl.DiffViewDiffDelete = {
+        fg = c.git.delete.fg,
+        bg = c.grey_three,
+      }
+      hl.DiffViewDiffChange = {
+        fg = c.git.change.fg,
+        bg = c.grey_three,
+      }
+      hl.DiffviewDiffText = {
+        -- fg = c.info,
+        bg = c.shuttle_grey,
+      }
+
+      hl.DiagnosticLineNumError = {
+        fg = c.background,
+        bg = c.diag.error,
+      }
+
+      hl.DiagnosticLineNumWarn = {
+        fg = c.background,
+        bg = c.diag.warning,
+      }
+
+      hl.Folded = {
+        fg = c.ship_cove,
+        bg = c.grey_three,
+        italic = false,
+        bold = false,
+      }
     end,
     -- config = function()
     --   require("jellybeans").setup {

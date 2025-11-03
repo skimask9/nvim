@@ -1,18 +1,17 @@
+local get_hlgroup = require("astroui").get_hlgroup
+
 ---@type LazySpec
 return {
   "AstroNvim/astroui",
   ---@type AstroUIOpts
   opts = {
     -- change colorscheme
-    -- colorscheme = "solarized-osaka-night",
     -- colorscheme = "astrodark",
-    -- colorscheme = "tokyonight",
     -- colorscheme = "flexoki",
-    colorscheme = "jellybeans",
+    -- colorscheme = "jellybeans",
+    colorscheme = "kanso",
     -- colorscheme = "vague",
-    -- colorscheme = "catppuccin",
     -- colorscheme = "nightfly",
-    -- colorscheme = "tokyonight-day",
     -- AstroUI allows you to easily modify highlight groups easily for any and all colorschemes
     -- highlights = {
     --   init = function()
@@ -28,15 +27,19 @@ return {
     highlights = {
       init = { -- this table overrides highlights in all themes
         -- Normal = { bg = "#000000" },
-        StatusLine = { bg = "none" },
-        StatusLineNC = { bg = "none" },
+
+        StatusLine = { bg = "NONE" },
+        StatusLineNC = { bg = "NONE" },
+        -- NormalFloat = { bg = "none" },
+        -- FloatBorder = { bg = "none" },
         WinBar = { bg = "none" },
         WinBarNC = { bg = "none" },
         TreesitterContext = { bg = "none" },
         FoldColumn = { bg = "none" },
-        CopilotSuggetion = { fg = "#888888" },
-        CopilotAnnotation = { fg = "#888888" },
+        CopilotSuggestion = { fg = get_hlgroup("Comment").fg, italic = true, bold = true },
 
+        -- working rn
+        -- CopilotSuggestion = { fg = "#585855" },
         -- StatusColumns = { bg = "none" },
       },
       astrodark = { -- a table of overrides/changes when applying the astrotheme theme

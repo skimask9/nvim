@@ -52,30 +52,32 @@ return {
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {
-      -- clangd = { capabilities = { offsetEncoding = "utf-8" } },
+      clangd = { capabilities = { offsetEncoding = "utf-8" } },
+      defaults = {
+        hover = { border = "none", silent = true }, -- customize lsp hover window
+        signature_help = false, -- disable any default customizations
+      },
       basedpyright = {
         settings = {
           basedpyright = {
             analysis = {
               disableOrganizeImports = true,
               typeCheckingMode = "basic",
-              -- typeCheckingMode = "strict",
-              autoImpCortompletions = true,
-              autoSearchPaths = true,
-              -- diagnosticMode = "workspace",
-              useLibraryCodeForTypes = true,
-
+              -- autoimpcortompletions = true,
               diagnosticSeverityOverrides = {
-                reportUnusedImport = false,
-                -- reportUnusedParameter = false,
+                -- reportunusedImport = false,
+                reportUnusedParameter = false,
                 reportUnannotatedClassAttribute = "none",
                 reportUnusedFunction = "information",
                 reportUnusedVariable = "information",
-                reportGeneralTypeIssues = "none",
-                reportOptionalMemberAccess = "none",
-                reportOptionalSubscript = "none",
-                reportPrivateImportUsage = "none",
-                reportAttributeAccessIssue = false, -- it stops all errors with django objects methods, need to be investigate
+                reportUnusedGeneralTypeIssues = "none",
+                reportUnusedMemberAccess = "none",
+                reportUnusedSubscript = "none",
+                reportUnusedOptionalMemberAccess = "none",
+                reportUnusedOptionalSubscript = "none",
+                reportUnusedPrivateImportUsage = "none",
+                reportUnusedAttributeAccessIssue = false, -- it stops all errors with django objects methods, need to be investigate
+                reportUnusedCallResult = "none", -- it stops all errors with django objects methods, need to be investigate
                 -- reportUnknownArgumentType = false,
                 -- reportUnknownVariableType = false,
               },
@@ -131,16 +133,6 @@ return {
       },
       -- Configure buffer local auto commands to add when attaching a language server
       autocmds = {
-        lualine_theme_refresh = {
-          {
-            event = "ColorScheme",
-            desc = "Refresh lualine theme on colorscheme change",
-            callback = function()
-              local ok, lualine = pcall(require, "lualine")
-              if ok then lualine.setup { options = { theme = "auto_theme_custom" } } end
-            end,
-          },
-        }, -- first key is the `augroup` to add the auto commands to (:h augroup)
         lsp_codelens_refresh = {
           -- Optional condition to create/delete auto command group
           -- can either be a string of a client capability or a function of `fun(client, bufnr): boolean`

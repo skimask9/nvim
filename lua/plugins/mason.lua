@@ -91,6 +91,19 @@ return {
               pythonPath = "python",
               console = "integratedTerminal",
             },
+            {
+              type = "python",
+              request = "launch",
+              name = "FastAPI (app.main)",
+              module = "uvicorn",
+              args = {
+                "app.main:app",
+                "--use-colors",
+                "--reload", -- doesn't work
+              },
+              pythonPath = "python",
+              console = "integratedTerminal",
+            },
           }
           require("mason-nvim-dap").default_setup(config) -- don't forget this!
         end,

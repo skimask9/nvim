@@ -1,0 +1,30 @@
+return {
+  "sphamba/smear-cursor.nvim",
+  enabled = false,
+  event = "VeryLazy",
+  dependencies = {
+    "karb94/neoscroll.nvim",
+    event = "VeryLazy",
+    opts = {
+      hide_cursor = true, -- Hide the cursor while scrolling
+      duratuion_multiplier = 0.75, -- Multiplier for the duration of the scrolling animation
+      mappings = { -- Keys to be mapped to their corresponding default scrolling animation
+        "<C-u>",
+        "<C-d>",
+        "<C-b>",
+        "<C-y>",
+        "zt",
+        "zz",
+        "zb",
+      },
+    },
+  },
+
+  opts = {
+    -- stiffness = 0.9,
+    -- trailing_stiffness = 0.58,
+    stiffness = 0.6,
+    trailing_stiffness = 0.5,
+    distance_stop_animating = 0.3, -- 0.1      > 0
+  },
+}

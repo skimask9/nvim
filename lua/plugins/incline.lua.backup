@@ -48,7 +48,7 @@ end
 return {
   "b0o/incline.nvim",
   event = "VeryLazy",
-  enabled = true,
+  enabled = false,
   keys = {
     { "<leader>uI", '<Cmd>lua require"incline".toggle()<Cr>', desc = "Incline: Toggle" },
   },

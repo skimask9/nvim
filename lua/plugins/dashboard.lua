@@ -3,6 +3,9 @@ local get_icon = require("astroui").get_icon
 return {
   "folke/snacks.nvim",
   opts = {
+    input = {
+      enabled = false,
+    },
     dashboard = {
       preset = {
         keys = {

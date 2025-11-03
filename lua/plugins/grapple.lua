@@ -23,13 +23,13 @@ return {
   },
   keys = {
 
-    -- { "<c-q>", "<cmd>Grapple select index=1<cr>", desc = "Select first tag" },
-    -- { "<c-e>", "<cmd>Grapple select index=2<cr>", desc = "Select second tag" },
-    -- { "<c-f>", "<cmd>Grapple select index=3<cr>", desc = "Select third tag" },
-    -- { "<c-t>", "<cmd>Grapple select index=4<cr>", desc = "Select fourth tag" },
+    { "<c-q>", "<cmd>Grapple select index=1<cr>", desc = "Select first tag" },
+    { "<c-e>", "<cmd>Grapple select index=2<cr>", desc = "Select second tag" },
+    { "<c-f>", "<cmd>Grapple select index=3<cr>", desc = "Select third tag" },
+    { "<c-t>", "<cmd>Grapple select index=4<cr>", desc = "Select fourth tag" },
 
-    { "<c-e>", "<cmd>Grapple cycle_tags next<cr>", desc = "Go to next tag" },
-    { "<c-q>", "<cmd>Grapple cycle_tags prev<cr>", desc = "Go to previous tag" },
+    { "<s-l>", "<cmd>Grapple cycle_tags next<cr>", desc = "Go to next tag" },
+    { "<s-h>", "<cmd>Grapple cycle_tags prev<cr>", desc = "Go to previous tag" },
   },
   cmd = { "Grapple" },
 }

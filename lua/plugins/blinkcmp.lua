@@ -7,6 +7,7 @@ vim.api.nvim_create_autocmd("User", {
   pattern = "BlinkCmpMenuClose",
   callback = function() vim.b.copilot_suggestion_hidden = false end,
 })
+
 local function has_words_before()
   local line, col = (unpack or table.unpack)(vim.api.nvim_win_get_cursor(0))
   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
@@ -91,9 +92,9 @@ return {
   "Saghen/blink.cmp",
   dependencies = {
     "rafamadriz/friendly-snippets",
-    -- "xzbdmw/colorful-menu.nvim",
+    "xzbdmw/colorful-menu.nvim",
     "kristijanhusak/vim-dadbod-completion",
-    { "Kaiser-Yang/blink-cmp-avante", lazy = true },
+    -- { "Kaiser-Yang/blink-cmp-avante", lazy = true },
     -- "fang2hou/blink-copilot",
   },
   opts = {
@@ -112,7 +113,7 @@ return {
         "snippets",
         "buffer",
         "dadbod",
-        "avante",
+        -- "avante",
         -- "copilot",
       },
       providers = {
@@ -121,10 +122,10 @@ return {
           module = "vim_dadbod_completion.blink",
           score_offset = 85, -- the higher the number, the higher the priority
         },
-        avante = {
-          module = "blink-cmp-avante",
-          name = "Avante",
-        },
+        -- avante = {
+        --   module = "blink-cmp-avante",
+        --   name = "Avante",
+        -- },
         -- copilot = {
         --   name = "copilot",
         --   module = "blink-copilot",
@@ -157,7 +158,7 @@ return {
       ["<C-U>"] = { "scroll_documentation_up", "fallback" },
       ["<C-D>"] = { "scroll_documentation_down", "fallback" },
       ["<C-e>"] = { "hide", "fallback" },
-      -- ["<CR>"] = { "accept", "fallback" },
+      ["<CR>"] = { "accept", "fallback" },
       ["<Tab>"] = {
         copilot_action "accept",
         "select_next",
@@ -167,25 +168,35 @@ return {
         end,
         "fallback",
       },
-      preset = "super-tab",
-      ["<CR>"] = {
-        function(cmp)
-          if vim.b[vim.api.nvim_get_current_buf()].nes_state then
-            cmp.hide()
-            return (
-              require("copilot-lsp.nes").apply_pending_nes()
-              and require("copilot-lsp.nes").walk_cursor_end_edit()
-            )
-          end
-          if cmp.snippet_active() then
-            return cmp.accept()
-          else
-            return cmp.select_and_accept()
-          end
-        end,
-        "snippet_forward",
-        "fallback",
-      },
+      -- ["<CR>"] = {
+      --   "snippet_forward",
+      --   function() -- sidekick next edit suggestion
+      --     return require("sidekick").nes_jump_or_apply()
+      --   end,
+      --   function() -- if you are using Neovim's native inline completions
+      --     return vim.lsp.inline_completion.get()
+      --   end,
+      --   "fallback",
+      -- },
+      -- preset = "super-tab",
+      -- ["<CR>"] = {
+      --   function(cmp)
+      --     if vim.b[vim.api.nvim_get_current_buf()].nes_state then
+      --       cmp.hide()
+      --       return (
+      --         require("copilot-lsp.nes").apply_pending_nes()
+      --         and require("copilot-lsp.nes").walk_cursor_end_edit()
+      --       )
+      --     end
+      --     if cmp.snippet_active() then
+      --       return cmp.accept()
+      --     else
+      --       return cmp.select_and_accept()
+      --     end
+      --   end,
+      --   "snippet_forward",
+      --   "fallback",
+      -- },
       ["<S-Tab>"] = {
         "select_prev",
         "snippet_backward",
@@ -209,21 +220,25 @@ return {
         --   return ctx.mode ~= "cmdline" or not vim.tbl_contains({ "/", "?" }, vim.fn.getcmdtype())
         -- end,
         auto_show = function(ctx) return ctx.mode ~= "cmdline" end,
-        border = "none",
-        winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
-        winblend = 25,
+        -- border = "none",
+        -- winblend = 25,
         draw = {
-          align_to = "label", -- or 'none' to disable, or 'cursor' to align to the cursor
-          columns = { { "kind_icon", gap = 1 }, { "label", "kind", gap = 1 } },
-          -- columns = { { "kind_icon", gap = 1 }, { "label", "source_name", "kind", gap = 1 } },
-          -- columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind", gap = 1 } },
+          -- align_to = "none", -- or 'none' to disable, or 'cursor' to align to the cursor
+          -- columns = { { "kind_icon", gap = 1 }, { "label", "kind", gap = 1 } },
+          -- columns = { { "kind_icon" }, { "label", gap = 1 }, { "label_description" }, { "source_name" } },
+          columns = {
+            { "kind_icon", gap = 1 },
+            { "label", gap = 2 },
+            { "kind", gap = 2 },
+            { "source_name" },
+          },
 
           treesitter = { "lsp" },
           components = {
-            -- label = {
-            --   text = function(ctx) return require("colorful-menu").blink_components_text(ctx) end,
-            --   highlight = function(ctx) return require("colorful-menu").blink_components_highlight(ctx) end,
-            -- },
+            label = {
+              text = function(ctx) return require("colorful-menu").blink_components_text(ctx) end,
+              highlight = function(ctx) return require("colorful-menu").blink_components_highlight(ctx) end,
+            },
             kind_icon = {
               text = function(ctx) return get_kind_icon(ctx).text end,
               highlight = function(ctx) return get_kind_icon(ctx).highlight end,
@@ -236,10 +251,9 @@ return {
         auto_show_delay_ms = 0,
         treesitter_highlighting = true,
         window = {
-          border = "none",
+          -- border = "none",
           -- border = "rounded",
-          winblend = 25,
-          winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
+          -- winblend = 25,
         },
       },
     },
@@ -250,10 +264,9 @@ return {
       },
       window = {
         -- border = (vim.o.background == "light") and "rounded" or "none",
-        border = "none",
+        -- border = "rounded",
         show_documentation = true,
-        winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
-        winblend = 25,
+        -- winblend = 25,
       },
     },
   },

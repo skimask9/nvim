@@ -11,6 +11,58 @@ return {
   "AstroNvim/astrocore",
   ---@type AstroCoreOpts
   opts = {
+    autocmds = {
+      autoread = {
+
+        -- unique name for this autocmd
+        name = "autoread_checktime",
+        -- also create an augroup called "autoread"
+        group = "autoread",
+        -- trigger on focus, buffer enter, or idle
+        event = { "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" },
+        -- apply to all files
+        pattern = "*",
+        -- description (shows in :autocmd)
+        desc = "Check for external file changes automatically",
+        -- main logic
+        callback = function()
+          if vim.fn.mode() ~= "c" then vim.cmd.checktime() end
+        end,
+      },
+
+      -- autocommands are organized into augroups for easy management
+      -- autoread = {
+      --   -- auto-reload files when they change externally
+      --   {
+      --     -- trigger on focus gained and buffer enter events
+      --     event = { "FocusGained", "BufEnter" },
+      --     -- apply to all files
+      --     pattern = "*",
+      --     -- nice description
+      --     desc = "Auto-reload files when changed externally",
+      --     -- add the autocmd to the newly created augroup
+      --     group = "autoread",
+      --     callback = function()
+      --       -- check if any buffers have been modified externally
+      --       vim.cmd "checktime"
+      --     end,
+      --   },
+      --   {
+      --     -- also check when cursor stops moving
+      --     event = "CursorHold",
+      --     -- apply to all files
+      --     pattern = "*",
+      --     -- nice description
+      --     desc = "Check for external file changes on cursor hold",
+      --     -- add the autocmd to the same augroup
+      --     group = "autoread",
+      --     callback = function()
+      --       -- check if any buffers have been modified externally
+      --       vim.cmd "checktime"
+      --     end,
+      --   },
+      -- },
+    },
     -- Configure core features of AstroNvim
     features = {
       large_buf = { size = 1024 * 256, lines = 10000 }, -- set global limits for large files for disabling features like treesitter
@@ -29,6 +81,7 @@ return {
     options = {
       opt = { -- vim.opt.<key>
         relativenumber = false, -- sets vim.opt.relativenumber
+        -- autoread = true,
         showtabline = 1, -- disable tabline
         number = true, -- sets vim.opt.number
         -- background = "light",
@@ -113,7 +166,7 @@ return {
           end,
         },
         ["<F3>"] = { ":w|!go run %<cr>", desc = "Run go file" },
-        ["<TAB>"] = { function() require("snacks").picker.buffers() end, desc = "Find buffers" },
+        ["<C-x>"] = { function() require("snacks").picker.buffers() end, desc = "Find buffers" },
         ["<F2>"] = { ":ToggleTerm direction=horizontal<cr>", desc = "ToggleTerm" },
         [",m"] = { "<cmd>lua vim.cmd('%s/\\r//g')<cr>", desc = "Remove carriage return" },
         -- ["<leader>Go"] = { "<cmd>:GitBlameOpenFileURL<cr>", desc = "Open File in Github.com" },
@@ -123,13 +176,9 @@ return {
         -- tables with the `name` key will be registered with which-key if it's installed
         -- this is useful for naming menus
         -- ["<leader>b"] = { name = "Buffers" },
-        ["<leader>v"] = { name = "Venv" },
         ["<leader>D"] = { name = " Tasks" },
-        -- quick save
         ["<c-c>"] = { '"+y', desc = "" },
         ["<c-v>"] = { '"+p', desc = "" },
-        ["<S-Down>"] = { "<cmd>t.<cr>", desc = "" },
-        ["<S-Up>"] = { "<cmd>t -1<cr>", desc = "" },
         -- ["<M-J>"] = { "<cmd>t.<cr>", desc = "" },
         -- ["<M-K>"] = { "<cmd>t -1<cr>", desc = "" },
         ["<M-Down>"] = { "<cmd>m+<cr>", desc = "" },
@@ -141,12 +190,15 @@ return {
       i = {
         ["<c-c>"] = { '"+y', desc = "" },
         ["<c-v>"] = { "<c-r>+", desc = "" },
-        ["<S-Down>"] = { "<cmd>t.<cr>", desc = "" },
-        ["<M-Down>"] = { "<cmd>m+<cr>", desc = "" },
         -- ["<S-Up>"] = { "<cmd>t -1<cr>", desc = "" },
         -- ["<M-Up>"] = { "<cmd>m-2<cr>", desc = "" },
         ["<C-s>"] = { "<cmd>w<cr>", desc = "" },
-        ["<F1>"] = { "<ESC>:w|!python3  %<CR>", desc = "Run python file" },
+        ["<F1>"] = {
+          function()
+            local term = Terminal:new { cmd = "python3 " .. vim.fn.expand "%:p", hidden = true, close_on_exit = false }
+            term:toggle()
+          end,
+        },
       },
       v = {
         ["p"] = { '"_dP', desc = "" },
@@ -154,14 +206,13 @@ return {
         ["<c-v>"] = { '"+p', desc = "" },
         ["<A-Down>"] = { ":move '>+1<CR>gv-gv", desc = "" },
         ["<A-Up>"] = { ":move '<-2<CR>gv-gv", desc = "" },
-        ["<S-Down>"] = { ":'<,'>t'><cr>", desc = "" },
       },
 
       t = {
         -- setting a mapping to false will disable it
         -- ["<esc>"] = false,
         --       -- extra mappings for terminal navigaton
-        ["<Leader><esc>"] = "<c-\\><c-n>",
+        -- ["<Leader><esc>"] = "<c-\\><c-n>",
         ["<Esc><esc>"] = "<c-\\><c-n>:ToggleTerm<CR>",
       },
     },

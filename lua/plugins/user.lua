@@ -14,29 +14,36 @@ return {
   --   event = "BufRead",
   --   config = function() require("lsp_signature").setup() end,
   -- },
+
   {
-    "xzbdmw/colorful-menu.nvim",
-    enabled = false,
-    opts = {},
+    "rmagatti/goto-preview",
+    dependencies = { "rmagatti/logger.nvim" },
+    event = "BufEnter",
+    config = true, -- necessary as per https://github.com/rmagatti/goto-preview/issues/88
+    opts = {
+      default_mappings = true,
+      references = { -- Configure the telescope UI for slowing the references cycling window.
+        provider = "snacks", -- telescope|fzf_lua|snacks|mini_pick|default
+      },
+    },
   },
-  -- {
-  --   "vague2k/vague.nvim",
-  --   enabled = false,
-  --   config = function()
-  --     -- NOTE: you do not need to call setup if you don't want to.
-  --     require("vague").setup {
-  --       vim.cmd "colorscheme vague",
-  --     }
-  --   end,
-  -- },
-  -- {
-  --   "rmagatti/goto-preview",
-  --   event = "BufEnter",
-  --   config = true, -- necessary as per https://github.com/rmagatti/goto-preview/issues/88
-  --   opts = {
-  --     default_mappings = true,
-  --   },
-  -- },
+  {
+    "karb94/neoscroll.nvim",
+    event = "VeryLazy",
+    opts = {
+      hide_cursor = true, -- Hide the cursor while scrolling
+      duratuion_multiplier = 0.55, -- Multiplier for the duration of the scrolling animation
+      mappings = { -- Keys to be mapped to their corresponding default scrolling animation
+        "<C-u>",
+        "<C-d>",
+        "<C-b>",
+        "<C-y>",
+        "zt",
+        "zz",
+        "zb",
+      },
+    },
+  },
 
   {
     "f-person/git-blame.nvim",
@@ -57,59 +64,27 @@ return {
       date_format = "%r",
       -- message_template = "  <author> 󰔠 <date> 󰈚 <summary>  <sha>",
       message_template = " <author> 󰈚 <summary>",
-      message_when_not_committed = " Not Committed Yet",
+      -- message_when_not_committed = " Not Committed Yet",
+      message_when_not_committed = "",
       max_commit_summary_length = 25,
       -- highlight_group = "Question",
       -- virtual_text_column = 80,
     },
   },
+  {
+    "shortcuts/no-neck-pain.nvim",
+    version = "*",
+    cmd = { "NoNeckPain" },
+  },
   -- {
-  --   "shortcuts/no-neck-pain.nvim",
-  --   version = "*",
-  --   cmd = { "NoNeckPain" },
+  --   "razak17/tailwind-fold.nvim",
+  --   enabled = false,
+  --   opts = {},
+  --   ft = { "html,htmldjango,django, templ" },
+  --   dependencies = { "nvim-treesitter/nvim-treesitter" },
+  --   event = "VeryLazy",
+  --   config = function() require("tailwind-fold").setup { ft = { "html", "htmldjango", "django", "templ" } } end,
   -- },
-  {
-    "Abstract-IDE/abstract-autocmds",
-    enabled = false,
-    lazy = false,
-    config = function()
-      require("abstract-autocmds").setup {
-        auto_resize_splited_window = true,
-        remove_whitespace_on_save = true,
-        no_autocomment_newline = true,
-        clear_last_used_search = true,
-        open_file_last_position = true,
-        -- highlight_on_yank = {
-        -- 	enable = true,
-        -- 	opts = {
-        -- 		timeout = 150,
-        -- 	},
-        -- },
-        -- give_border = {
-        --   enable = true,
-        --   opts = {
-        --     pattern = { "null-ls-info", "lspinfo" },
-        --   },
-        -- },
-        smart_dd = true,
-        -- visually_codeblock_shift = true,
-        -- move_selected_upndown = true,
-        smart_visual_paste = true,
-        dont_suspend_with_cz = true,
-        smart_save_in_insert_mode = true,
-        scroll_from_center = true,
-      }
-    end,
-  },
-  {
-    "razak17/tailwind-fold.nvim",
-    -- enabled = false,
-    opts = {},
-    ft = { "html,htmldjango,django, templ" },
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-    event = "VeryLazy",
-    config = function() require("tailwind-fold").setup { ft = { "html", "htmldjango", "django", "templ" } } end,
-  },
 
   {
     "theHamsta/nvim-dap-virtual-text",
@@ -136,6 +111,7 @@ return {
       -- add more custom luasnip configuration such as filetype extend or custom snippets
       local luasnip = require "luasnip"
       luasnip.filetype_extend("javascript", { "javascriptreact" })
+      luasnip.filetype_extend("html", { "htmldjango" })
     end,
   },
 

@@ -16,6 +16,36 @@ local function doing_status()
   return " " .. status_doing
 end
 
+local hide_in_width = function() return vim.fn.winwidth(0) > 130 end
+
+local sidekick_cli = {
+  function()
+    local status = require("sidekick.status").cli()
+    return " " .. (#status > 1 and #status or "")
+  end,
+  cond = function() return #require("sidekick.status").cli() > 0 end,
+  color = function() return "Special" end,
+}
+
+local NESStatus = {
+  function()
+    local Nes = require "sidekick.nes"
+    if next(Nes._requests) then
+      return "󰗮" -- loading (waiting on API)
+    end
+    if Nes.have() then return " " end
+    return " "
+  end,
+  color = function()
+    local Nes = require "sidekick.nes"
+    if next(Nes._requests) then return "DiagnosticWarn" end
+  end,
+  cond = function()
+    if not require("sidekick.nes").enabled then return false end
+    return true
+  end,
+}
+
 -- GIT BLAME COMMIT COMPONENT
 local function GitBlameComponent()
   -- Ensure the gitblame plugin is loaded
@@ -33,6 +63,16 @@ local function GitBlameComponent()
   end
 end
 
+local mode = {
+  "mode",
+  padding = { left = 0, right = 0 },
+
+  fmt = function(str)
+    return " " .. str:sub(1, 1) -- displays only the first character of the mode
+    -- return " " .. str
+  end,
+}
+
 --  PYTHON VENV COMPONENT
 local function PythonVenvComponent()
   -- Only show for Python files
@@ -40,10 +80,6 @@ local function PythonVenvComponent()
 
   -- Function to extract the virtual environment name
   local function get_venv_name()
-    -- Check for Conda environment first
-    local conda_env = os.getenv "CONDA_DEFAULT_ENV"
-    if conda_env then return conda_env end
-
     -- Check for regular virtual environment
     local venv_path = os.getenv "VIRTUAL_ENV"
     if venv_path then
@@ -73,33 +109,38 @@ return {
   dependencies = { "nvim-tree/nvim-web-devicons", "pnx/lualine-lsp-status", "AndreM222/copilot-lualine" },
   event = "VeryLazy",
   config = function()
-    local branch_bg = vim.api.nvim_get_hl(0, { name = "Folded" }).bg
-    local diff_blame_bg = vim.api.nvim_get_hl(0, { name = "Visual" }).bg
-    local non_text = vim.api.nvim_get_hl(0, { name = "NonText" }).fg
+    -- local branch_bg = vim.api.nvim_get_hl(0, { name = "Folded" }).bg
+    -- local diff_blame_bg = vim.api.nvim_get_hl(0, { name = "Visual" }).bg
+    -- local non_text = vim.api.nvim_get_hl(0, { name = "NonText" }).fg
     local string_txt = vim.api.nvim_get_hl(0, { name = "String" }).fg
-    local auto_theme_custom = require "lualine.themes.auto"
-    auto_theme_custom.normal.c.bg = "None"
-    auto_theme_custom.insert.c.bg = "None"
-    auto_theme_custom.command.c.bg = "None"
-    auto_theme_custom.visual.c.bg = "None"
-    auto_theme_custom.replace.c.bg = "None"
+    -- local auto_theme_custom = require "lualine.themes.auto"
+    -- auto_theme_custom.normal.c.bg = "None"
+    -- auto_theme_custom.insert.c.bg = "None"
+    -- auto_theme_custom.command.c.bg = "None"
+    -- auto_theme_custom.visual.c.bg = "None"
+    -- auto_theme_custom.replace.c.bg = "None"
 
+    --
     -- Get the colors based on the current background setting
     require("lualine").setup {
       options = {
-        theme = auto_theme_custom,
+        -- theme = auto_theme_custom,
+        theme = "auto",
         always_divide_middle = true,
         disabled_filetypes = { -- Filetypes to disable lualine for.
           statusline = { "snacks_dashboard" }, -- only ignores the ft for statusline.
         },
-        -- component_separators = { left = "", right = "" },
         component_separators = { left = "", right = "" },
         globalstatus = true,
-        section_separators = { left = "", right = "" },
+        section_separators = { right = "", left = "" },
       },
       sections = {
         lualine_a = {
-          { "mode", separator = { left = "", right = "" }, icon = { "", align = "left" }, padding = 0 },
+          -- { "mode", icon = { "", align = "left" }, padding = 1 },
+          -- { "mode", separator = { right = "" }, padding = { left = 1, right = 0 } },
+
+          -- { "mode", padding = { left = 1, right = 0 } },
+          mode,
         },
         lualine_b = {
           {
@@ -107,14 +148,11 @@ return {
             draw_empty = false,
             icon = { " ", align = "left" },
             padding = { left = 0, right = 0 },
-            color = { bg = string.format("#%06x", branch_bg), gui = "italic,bold" },
-            -- color = {
-            --     fg = "#99ad6a",
-            --     bg = "#384048",
-            --     gui = "italic,bold",
-            -- },
+            color = {
+              gui = "italic,bold",
+            },
 
-            separator = { left = "", right = "" },
+            -- separator = { left = "", right = "" },
           },
           {
             "diff",
@@ -122,38 +160,31 @@ return {
 
             symbols = { added = " ", modified = " ", removed = " " },
             padding = { left = 1, right = 0 },
-            -- color = { bg = "#404040" },
-            color = { bg = string.format("#%06x", diff_blame_bg) },
+            cond = hide_in_width,
           },
           {
             GitBlameComponent,
-            draw_empty = false,
+            draw_empty = true,
 
             padding = { left = 0, right = 0 },
-            -- color = { fg = "#606060", bg = "#404040", gui = "italic" },
-            color = {
-              bg = string.format("#%06x", diff_blame_bg),
-              fg = string.format("#%06x", non_text),
-              gui = "italic,bold",
-            },
-
-            separator = { right = "" },
+            -- color = { fg = "#606060", gui = "italic" },
+            color = { fg = "#606060" },
+            cond = hide_in_width,
           },
         },
         lualine_c = {
-          -- { "grapple", color = "Function" },
+          { "grapple", cond = hide_in_width },
           { "%=" },
 
           {
             doing_status,
-            color = {
-              fg = string.format("#%06x", non_text),
-              gui = "italic",
-            },
+            color = { fg = "#606060", gui = "italic" },
+            cond = hide_in_width,
           },
         },
         lualine_x = {
-
+          sidekick_cli,
+          NESStatus,
           {
             "copilot",
             show_colors = true,
@@ -167,16 +198,41 @@ return {
 
             update_in_insert = true,
             padding = { left = 0, right = 1 },
+            cond = hide_in_width,
           },
 
           -- { "lsp-status", separator = { left = "" } },
         },
         lualine_y = {
           {
-            "lsp-status",
-            separator = { left = "" },
+            -- {
+            --   "lsp_status",
+            --   padding = { left = 1, right = 1 },
+            --   -- color = { bg = "none" },
+            -- },
+            PythonVenvComponent,
+            cond = hide_in_width,
+
             padding = { left = 0, right = 1 },
-            color = { bg = string.format("#%06x", diff_blame_bg) },
+            -- color = {
+            --   fg = string.format("#%06x", string_txt),
+            -- },
+          },
+          {
+            "lsp_status",
+            icon = "", -- f013
+            symbols = {
+              -- Standard unicode symbols to cycle through for LSP progress:
+              spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
+              -- Standard unicode symbol for when LSP is done:
+              done = "",
+              -- Delimiter inserted between LSP names:
+              separator = " ",
+            },
+            -- List of LSP names to ignore (e.g., `null-ls`):
+            ignore_lsp = { "null-ls", "copilot", "ruff", "copilot_ls" },
+            padding = { left = 0, right = 1 },
+            cond = hide_in_width,
           },
           -- {
           --   "fileformat",
@@ -184,30 +240,18 @@ return {
           --   color = { bg = string.format("#%06x", diff_blame_bg) },
           -- },
           {
-            PythonVenvComponent,
-            separator = { left = "" },
-
-            padding = { left = 0, right = 1 },
-            color = {
-              fg = string.format("#%06x", string_txt),
-              bg = string.format("#%06x", diff_blame_bg),
-            },
-          },
-          {
             "filetype",
             padding = { left = 0, right = 1 },
-            separator = { left = "" },
-
-            color = { bg = string.format("#%06x", branch_bg) },
           },
         },
         lualine_z = {
           {
             "location",
-            separator = { left = "", right = "" },
-            padding = { left = 0, right = 1 },
+            -- padding = { left = 1, right = 1 },
+            -- separator = { left = "" },
+            padding = { left = 0, right = 0 },
           },
-          { "progress", separator = { right = "" }, padding = 0 },
+          { "progress", padding = { left = 1, right = 0 } },
         },
       },
       inactive_sections = {
