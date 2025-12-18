@@ -12,23 +12,31 @@ return {
   ---@type AstroCoreOpts
   opts = {
     autocmds = {
-      autoread = {
-
-        -- unique name for this autocmd
-        name = "autoread_checktime",
-        -- also create an augroup called "autoread"
-        group = "autoread",
-        -- trigger on focus, buffer enter, or idle
-        event = { "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" },
-        -- apply to all files
-        pattern = "*",
-        -- description (shows in :autocmd)
-        desc = "Check for external file changes automatically",
-        -- main logic
-        callback = function()
-          if vim.fn.mode() ~= "c" then vim.cmd.checktime() end
-        end,
+      auto_html_django = {
+        name = "auto_html_django",
+        group = "auto_html_django",
+        event = "BufWritePre",
+        pattern = { "*.html", "*.htmldjango" },
+        desc = "Auto set filetype to html.django for .html and .htmldjango files",
+        callback = function() vim.lsp.buf.format { async = false } end,
       },
+      -- autoread = {
+      --
+      --   -- unique name for this autocmd
+      --   name = "autoread_checktime",
+      --   -- also create an augroup called "autoread"
+      --   group = "autoread",
+      --   -- trigger on focus, buffer enter, or idle
+      --   event = { "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" },
+      --   -- apply to all files
+      --   pattern = "*",
+      --   -- description (shows in :autocmd)
+      --   desc = "Check for external file changes automatically",
+      --   -- main logic
+      --   callback = function()
+      --     if vim.fn.mode() ~= "c" then vim.cmd.checktime() end
+      --   end,
+      -- },
 
       -- autocommands are organized into augroups for easy management
       -- autoread = {
@@ -80,14 +88,12 @@ return {
     -- vim options can be configured here
     options = {
       opt = { -- vim.opt.<key>
-        relativenumber = false, -- sets vim.opt.relativenumber
-        -- autoread = true,
-        showtabline = 1, -- disable tabline
-        number = true, -- sets vim.opt.number
-        -- background = "light",
+        number = true, -- Show line numbers
+        relativenumber = false, -- Use absolute numbers (not relative)
+        showtabline = 0, -- disable tabline
         spell = true, -- sets vim.opt.spell
         path = vim.opt.path + "**",
-        signcolumn = "auto", -- sets vim.opt.signcolumn to auto
+        -- signcolumn = "auto", -- sets vim.opt.signcolumn to auto
         mousemoveevent = true,
         linebreak = true, -- linebreak soft wrap at words
         breakindent = true,
@@ -104,9 +110,8 @@ return {
         wrap = true, -- sets vim.opt.wrap
         -- colorcolumn = "89",
         cmdheight = 0,
-        pumblend = 5, -- for cmp menu
-        winblend = 5, -- for documentation popup
-        rnu = true,
+        -- pumblend = 5, -- for cmp menu
+        -- winblend = 5, -- for documentation popup
         scrolloff = 10,
         laststatus = 3,
         -- clipboard = "unnamedplus",
@@ -131,8 +136,8 @@ return {
         -- navigate buffer tabs
         ["]b"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
         ["[b"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
-
-        -- mappings seen under group name "Buffer"
+        --
+        -- -- mappings seen under group name "Buffer"
         ["<Leader>bd"] = {
           function()
             require("astroui.status.heirline").buffer_picker(
@@ -156,7 +161,6 @@ return {
         -- tables with just a `desc` key will be registered with which-key if it's installed
         -- this is useful for naming menus
         ["<Leader>b"] = { desc = "Buffers" },
-        -- quick save
         ["<C-s>"] = { ":w!<cr>", desc = "Save File" }, -- change description but the same command
         -- ["<F1>"] = { ":w|!python3 %<CR>", desc = "Run python file" },
         ["<F1>"] = {

@@ -27,6 +27,8 @@ return {
       },
     },
   },
+  { "vimpostor/vim-tpipeline" },
+
   {
     "karb94/neoscroll.nvim",
     event = "VeryLazy",

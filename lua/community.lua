@@ -26,7 +26,6 @@ return {
   { import = "astrocommunity.editing-support.vim-move" },
   { import = "astrocommunity.recipes.vscode-icons" },
   { import = "astrocommunity.recipes.vscode" },
-  { import = "astrocommunity.bars-and-lines.dropbar-nvim" },
   { import = "astrocommunity.test.neotest" },
   { import = "astrocommunity.markdown-and-latex.render-markdown-nvim" },
   -- { import = "astrocommunity.recipes.astrolsp-no-insert-inlay-hints" },

@@ -74,35 +74,35 @@ local mode = {
 }
 
 --  PYTHON VENV COMPONENT
-local function PythonVenvComponent()
-  -- Only show for Python files
-  if vim.bo.filetype ~= "python" then return "" end
-
-  -- Function to extract the virtual environment name
-  local function get_venv_name()
-    -- Check for regular virtual environment
-    local venv_path = os.getenv "VIRTUAL_ENV"
-    if venv_path then
-      -- Extract just the environment name from the path
-      return venv_path:match "([^/\\]+)$" or venv_path
-    end
-
-    return "✗"
-  end
-
-  local venv = get_venv_name()
-  return " " .. venv
-end
+-- local function PythonVenvComponent()
+--   -- Only show for Python files
+--   if vim.bo.filetype ~= "python" then return "" end
+--
+--   -- Function to extract the virtual environment name
+--   local function get_venv_name()
+--     -- Check for regular virtual environment
+--     local venv_path = os.getenv "VIRTUAL_ENV"
+--     if venv_path then
+--       -- Extract just the environment name from the path
+--       return venv_path:match "([^/\\]+)$" or venv_path
+--     end
+--
+--     return "✗"
+--   end
+--
+--   local venv = get_venv_name()
+--   return " " .. venv
+-- end
 return {
   "nvim-lualine/lualine.nvim",
-  enabled = true,
+  -- enabled = false,
   specs = {
     {
       "rebelot/heirline.nvim",
       optional = true,
       opts = function(_, opts)
-        opts.statusline = nil
         opts.winbar = nil
+        opts.tabline = nil
       end,
     },
   },
@@ -204,20 +204,20 @@ return {
           -- { "lsp-status", separator = { left = "" } },
         },
         lualine_y = {
-          {
-            -- {
-            --   "lsp_status",
-            --   padding = { left = 1, right = 1 },
-            --   -- color = { bg = "none" },
-            -- },
-            PythonVenvComponent,
-            cond = hide_in_width,
+          -- {
+          -- {
+          --   "lsp_status",
+          --   padding = { left = 1, right = 1 },
+          --   -- color = { bg = "none" },
+          -- },
+          -- PythonVenvComponent,
+          -- cond = hide_in_width,
 
-            padding = { left = 0, right = 1 },
-            -- color = {
-            --   fg = string.format("#%06x", string_txt),
-            -- },
-          },
+          -- padding = { left = 0, right = 1 },
+          -- color = {
+          --   fg = string.format("#%06x", string_txt),
+          -- },
+          -- },
           {
             "lsp_status",
             icon = "", -- f013
@@ -265,5 +265,6 @@ return {
       },
       extensions = { "toggleterm", "trouble", "mason", "lazy", "avante", "neo-tree" },
     }
+    if os.getenv "TMUX" then vim.defer_fn(function() vim.o.laststatus = 0 end, 0) end
   end,
 }

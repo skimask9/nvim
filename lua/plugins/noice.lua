@@ -26,7 +26,8 @@ return {
         view = nil, -- when nil, use defaults from documentation
         ---@type NoiceViewOptions
         opts = {
-          -- border = "rounded",
+          border = "rounded",
+          -- border = "double",
           -- border = "none",
           -- winblend = 25,
           size = {
@@ -44,6 +45,23 @@ return {
           -- border = "none",
           border = "rounded",
           -- winblend = 25,
+        },
+      },
+    },
+    views = {
+      hover = {
+        border = {
+          style = "rounded",
+        },
+      },
+      confirm = {
+        border = {
+          style = "rounded",
+        },
+      },
+      popup = {
+        border = {
+          style = "rounded",
         },
       },
     },

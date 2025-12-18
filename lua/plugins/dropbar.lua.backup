@@ -1,6 +1,6 @@
 return {
   "Bekaboo/dropbar.nvim",
-  enabled = true,
+  enabled = false,
   event = "UIEnter",
   config = function()
     local dropbar_api = require "dropbar.api"
@@ -9,11 +9,6 @@ return {
     vim.keymap.set("n", "];", dropbar_api.select_next_context, { desc = "Select next context" })
   end,
   specs = {
-    {
-      "rebelot/heirline.nvim",
-      optional = true,
-      opts = function(_, opts) opts.winbar = nil end,
-    },
     {
       "catppuccin",
       optional = true,

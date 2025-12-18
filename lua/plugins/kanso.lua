@@ -45,7 +45,7 @@ return { -- Using Lazy
             },
             NeoTreeNormal = {
               bg = is_light and zen_color.palette.pearlGray or zen_color.palette.zenBg0,
-              fg = is_light and zen_color.palette.zenBg0 or zen_color.palette.zenBg0,
+              fg = is_light and zen_color.palette.zenBg0 or zen_color.palette.gray,
             },
             NeoTreeTitleBar = {
               bg = is_light and zen_color.palette.pearlGray or zen_color.palette.zenBg0,
@@ -53,14 +53,14 @@ return { -- Using Lazy
           }
         end,
         background = { -- map the value of 'background' option to a theme
-          dark = "zen", -- try "zen", "mist" or "pearl" !
+          dark = "ink", -- try "zen", "mist" or "pearl" !
           light = "pearl", -- try "ink" "zen", "mist" or "pearl" !
         },
         -- foreground = "default", -- "default" or "saturated" (can also be a table like background)
         foreground = {
           dark = "default", -- Use default colors in dark mode
-          light = "saturated", -- Use higher saturation in light mode
-          -- light = "default", -- Use higher saturation in light mode
+          -- light = "saturated", -- Use higher saturation in light mode
+          light = "default", -- Use higher saturation in light mode
         },
       }
 

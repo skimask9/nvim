@@ -78,6 +78,7 @@ return {
                 reportUnusedPrivateImportUsage = "none",
                 reportUnusedAttributeAccessIssue = false, -- it stops all errors with django objects methods, need to be investigate
                 reportUnusedCallResult = "none", -- it stops all errors with django objects methods, need to be investigate
+                reportUnknownMemberType = "none",
                 -- reportUnknownArgumentType = false,
                 -- reportUnknownVariableType = false,
               },
